@@ -47,7 +47,7 @@ export default function TodoItem({ tarea, toggleComplete, eliminarTarea, editarT
           </button>
         ) : (
           <button onClick={() => setEditando(true)}>
-            <PencilIcon className="w-5 h-5 text-gray-400 hover:text-blue-500" />
+            <PencilIcon className="w-5 h-5 text-pink-400 hover:text-blue-500" />
           </button>
         )}
 

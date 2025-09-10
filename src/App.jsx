@@ -56,7 +56,7 @@ export default function App() {
           onKeyDown={(e) => e.key === "Enter" && agregarTareas()} // Enter agrega tarea
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-purple-400"
           onClick={agregarTareas}
         >
           Agregar
@@ -66,7 +66,7 @@ export default function App() {
       {/* Lista de tareas */}
       <div>
         {tareas.length === 0 ? (
-          <p className="text-center text-gray-500">No hay tareas aún 🚀</p>
+          <p className="text-center text-gray-500">No hay tareas </p>
         ) : (
           tareas.map((tarea) => (
             <TodoItem
