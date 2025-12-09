@@ -5,10 +5,10 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "Server.js",
+  "main": "backend/Server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
- "start": "node backend/Server.js"
+    "start": "node backend/Server.js"
   },
   "keywords": [],
   "dependencies": {
