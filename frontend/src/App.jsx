@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TodoItem from "./todoitem.jsx";
 
 // URL de tu backend desplegado
-const BACKEND_URL = "https://todo-list-miercoles.onrender.com";
+const BACKEND_URL = "https://todo-list-miercoles-production.up.railway.app";
 
 export default function App() {
   const [tareas, setTareas] = useState([]);
