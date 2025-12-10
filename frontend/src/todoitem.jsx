@@ -3,13 +3,12 @@ import { TrashIcon, PencilIcon, CheckIcon } from "@heroicons/react/16/solid";
 
 export default function TodoItem({ tarea, toggleComplete, eliminarTarea, editarTarea }) {
   const [editando, setEditando] = useState(false);
-  const [nuevoTexto, setNuevoTexto] = useState(tarea.texto);
+  const [nuevoTexto, setNuevoTexto] = useState(tarea.titulo || "");
 
   const guardarEdicion = () => {
-    if (nuevoTexto.trim()) {
-      editarTarea(tarea.id, nuevoTexto.trim());
-      setEditando(false);
-    }
+    if (!nuevoTexto.trim()) return;
+    editarTarea(tarea.id, nuevoTexto.trim());
+    setEditando(false);
   };
 
   return (
@@ -24,23 +23,21 @@ export default function TodoItem({ tarea, toggleComplete, eliminarTarea, editarT
       ) : (
         <span
           className={`flex-1 cursor-pointer ${
-            tarea.completada ? "line-through text-gray-500" : "text-gray-800"
+            tarea.completado ? "line-through text-gray-500" : "text-gray-800"
           }`}
           onClick={toggleComplete}
         >
-          {tarea.texto}
+          {tarea.titulo}
         </span>
       )}
 
       <div className="flex items-center gap-2">
-        {/* Checkbox para completar */}
         <input
           type="checkbox"
-          checked={tarea.completada}
+          checked={tarea.completado}
           onChange={toggleComplete}
         />
 
-        {/* Botón editar o guardar */}
         {editando ? (
           <button onClick={guardarEdicion}>
             <CheckIcon className="w-5 h-5 text-green-500 hover:text-green-700" />
@@ -51,7 +48,6 @@ export default function TodoItem({ tarea, toggleComplete, eliminarTarea, editarT
           </button>
         )}
 
-        {/* Botón eliminar */}
         <button onClick={() => eliminarTarea(tarea.id)}>
           <TrashIcon className="w-5 h-5 text-gray-400 hover:text-red-500" />
         </button>
