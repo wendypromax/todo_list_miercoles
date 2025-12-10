@@ -1,18 +1,18 @@
+// backend/Server.js
 const express = require('express');
 const cors = require('cors');
 const db = require('./db'); // conexión MySQL
 
 const app = express();
 
-// Middleware: CORS + JSON
-app.use(express.json());
-
-// Configuración CORS para evitar problemas de preflight
+// Middlewares
 app.use(cors({
-  origin: "http://localhost:5173",  // Cambia por tu frontend en producción
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  origin: "http://localhost:5173",  // Cambiar por el dominio de tu frontend en producción
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type"]
 }));
+
+app.use(express.json()); // para parsear JSON
 
 // --- Rutas CRUD ---
 
@@ -76,9 +76,6 @@ app.delete('/tareas/:id', (req, res) => {
     res.json({ message: 'Tarea eliminada' });
   });
 });
-
-// Opcional: responder a preflight request OPTIONS
-app.options('*', cors());
 
 // Puerto
 const PORT = process.env.PORT || 5000;
