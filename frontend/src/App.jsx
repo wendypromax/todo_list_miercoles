@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import TodoItem from "./TodoItem.jsx";
+import TodoItem from "./todoitem.jsx";
 
 // URL de tu backend desplegado
 const BACKEND_URL = "https://todo-list-miercoles.onrender.com";
