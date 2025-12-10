@@ -1,15 +1,14 @@
 {
-  "name": "todo_list_miercoles",
+  "name": "backend",
   "version": "1.0.0",
-  "main": "backend/Server.js",
+  "main": "Server.js",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
-    "start": "node backend/Server.js"
+    "start": "node Server.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
     "express": "^4.22.1",
-    "mysql2": "^3.15.3"
+    "cors": "^2.8.5",
+    "mysql2": "^3.15.3",
+    "dotenv": "^17.2.3"
   }
 }

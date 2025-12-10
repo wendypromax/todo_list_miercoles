@@ -2,7 +2,7 @@
   "name": "todo_list_miercoles",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install",
     "start": "node backend/Server.js"
   }
 }
