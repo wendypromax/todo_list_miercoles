@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// Importa tu conexión a la DB desde db.js
+// Importa tu conexión a la DB
 const db = require('./db');
 
 const app = express();
@@ -93,10 +93,11 @@ app.delete('/tareas/:id', (req, res) => {
 });
 
 // ------------------- SERVIR FRONTEND -------------------
-const frontendBuildPath = path.join(__dirname, '../frontend/build');
+// Importante: VITE usa "dist" (no build)
+const frontendBuildPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(frontendBuildPath));
 
-// React router (AL FINAL)
+// React Router (siempre al final)
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendBuildPath, 'index.html'));
 });
