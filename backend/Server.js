@@ -1,7 +1,22 @@
-// backend/index.js
-// ... tu código actual arriba
+const express = require('express');
+const cors = require('cors');
+const db = require('./db'); // conexión MySQL
 
-// 1️⃣ Obtener todas las tareas
+const app = express();
+
+// Middleware: CORS + JSON
+app.use(express.json());
+
+// Configuración CORS para evitar problemas de preflight
+app.use(cors({
+  origin: "http://localhost:5173",  // Cambia por tu frontend en producción
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type"]
+}));
+
+// --- Rutas CRUD ---
+
+// Obtener todas las tareas
 app.get('/tareas', (req, res) => {
   db.query('SELECT * FROM tareas', (err, results) => {
     if (err) return res.status(500).send(err);
@@ -9,12 +24,24 @@ app.get('/tareas', (req, res) => {
   });
 });
 
-// 2️⃣ Actualizar tarea (marcar completada o editar título)
+// Agregar tarea
+app.post('/tareas', (req, res) => {
+  const { titulo, descripcion } = req.body;
+  db.query(
+    'INSERT INTO tareas (titulo, descripcion) VALUES (?, ?)',
+    [titulo, descripcion],
+    (err, results) => {
+      if (err) return res.status(500).send(err);
+      res.json({ id: results.insertId, titulo, descripcion, completado: false });
+    }
+  );
+});
+
+// Actualizar tarea (editar título o marcar completada)
 app.put('/tareas/:id', (req, res) => {
   const { id } = req.params;
-  const { titulo, completada } = req.body;
+  const { titulo, completado } = req.body;
 
-  // Construir query dinámicamente según lo que se envíe
   let query = 'UPDATE tareas SET ';
   const params = [];
 
@@ -23,13 +50,13 @@ app.put('/tareas/:id', (req, res) => {
     params.push(titulo);
   }
 
-  if (completada !== undefined) {
+  if (completado !== undefined) {
     if (params.length > 0) query += ', ';
     query += 'completado = ? ';
-    params.push(completada);
+    params.push(completado);
   }
 
-  query += 'WHERE id = ?';
+  query += ' WHERE id = ?';
   params.push(id);
 
   db.query(query, params, (err) => {
@@ -41,7 +68,7 @@ app.put('/tareas/:id', (req, res) => {
   });
 });
 
-// 3️⃣ Eliminar tarea
+// Eliminar tarea
 app.delete('/tareas/:id', (req, res) => {
   const { id } = req.params;
   db.query('DELETE FROM tareas WHERE id = ?', [id], (err) => {
@@ -49,3 +76,10 @@ app.delete('/tareas/:id', (req, res) => {
     res.json({ message: 'Tarea eliminada' });
   });
 });
+
+// Opcional: responder a preflight request OPTIONS
+app.options('*', cors());
+
+// Puerto
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));

@@ -1,16 +1,19 @@
+// backend/db.js
 const mysql = require('mysql2');
-require('dotenv').config();
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST, 
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+const db = mysql.createConnection({
+  host: "localhost", // o el host que uses en Railway
+  user: "root",      // tu usuario
+  password: "",      // tu contraseña
+  database: "todo_list" // nombre de tu base de datos
 });
 
-connection.connect((err) => {
-  if (err) throw err;
-  console.log('Conectado a la base de datos MySQL!');
+db.connect((err) => {
+  if (err) {
+    console.error("Error de conexión a la base de datos:", err);
+    return;
+  }
+  console.log("Conectado a la base de datos MySQL");
 });
 
-module.exports = connection;
+module.exports = db;
