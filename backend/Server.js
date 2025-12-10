@@ -1,19 +1,16 @@
-// Server.js
+// backend/Server.js
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-
-// Importa tu conexión a la DB
 const db = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// --------------------- RUTAS API ---------------------
+// ======================= RUTAS API =======================
 
 // Obtener todas las tareas
 app.get('/tareas', (req, res) => {
@@ -31,6 +28,7 @@ app.post('/tareas', (req, res) => {
     [titulo, descripcion],
     (err, result) => {
       if (err) return res.status(500).json({ error: err.message });
+
       res.json({
         id: result.insertId,
         titulo,
@@ -46,8 +44,6 @@ app.put('/tareas/:id', (req, res) => {
   const { id } = req.params;
   const { titulo, descripcion, completado } = req.body;
 
-  console.log("PUT recibido:", req.body); // DEBUG
-
   db.query('SELECT * FROM tareas WHERE id = ?', [id], (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     if (results.length === 0)
@@ -55,10 +51,8 @@ app.put('/tareas/:id', (req, res) => {
 
     const tarea = results[0];
 
-    const nuevoTitulo = titulo !== undefined ? titulo : tarea.titulo;
-    const nuevaDescripcion = descripcion !== undefined ? descripcion : tarea.descripcion;
-
-    // 🔥 FIX: convertir boolean → número
+    const nuevoTitulo = titulo ?? tarea.titulo;
+    const nuevaDescripcion = descripcion ?? tarea.descripcion;
     const nuevoCompletado =
       completado !== undefined ? Number(completado) : tarea.completado;
 
@@ -92,17 +86,18 @@ app.delete('/tareas/:id', (req, res) => {
   });
 });
 
-// ------------------- SERVIR FRONTEND -------------------
-// Importante: VITE usa "dist" (no build)
-const frontendBuildPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendBuildPath));
+// =================== SERVIR FRONTEND (Vite) ===================
 
-// React Router (siempre al final)
+// 🔥 IMPORTANTE → Carpeta correcta: dist
+const frontendPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(frontendPath));
+
+// React / Vite
 app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// ------------------- INICIAR SERVIDOR -------------------
+// =================== INICIAR SERVIDOR ===================
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
