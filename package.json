@@ -1,10 +1,8 @@
 {
   "name": "todo_list_miercoles",
   "version": "1.0.0",
-  "private": true,
   "scripts": {
-  "start": "node backend/Server.js",
-  "build": "npm run build --prefix frontend"
-}
-
+    "build": "cd frontend && npm install && npm run build",
+    "start": "node backend/Server.js"
+  }
 }
