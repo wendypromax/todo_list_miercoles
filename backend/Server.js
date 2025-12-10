@@ -1,13 +1,15 @@
-// backend/Server.js
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors());
+app.use(cors({
+  origin: "https://adventurous-curiosity-production-3d05.up.railway.app",
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
+
 app.use(express.json());
 
 // ======================= RUTAS API =======================
@@ -84,17 +86,6 @@ app.delete('/tareas/:id', (req, res) => {
 
     res.json({ message: 'Tarea eliminada', id });
   });
-});
-
-// =================== SERVIR FRONTEND (Vite) ===================
-
-// 🔥 IMPORTANTE → Carpeta correcta: dist
-const frontendPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendPath));
-
-// React / Vite
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 // =================== INICIAR SERVIDOR ===================
