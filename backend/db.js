@@ -2,18 +2,18 @@
 const mysql = require('mysql2');
 
 const db = mysql.createConnection({
-  host: 'caboose.proxy.rlwy.net', // Host de Railway
-  user: 'root',                    // Usuario de Railway
-  password: 'NraXnkOcWALyplxrkVrQfuNPDuZwFkYX',       // Contraseña de Railway
-  database: 'railway',             // Nombre de la base de datos
-  port: 12831                       // Puerto de Railway
+  host: 'caboose.proxy.rlwy.net',
+  user: 'root',
+  password: 'NraXnkOcWALyplxrkVrQfuNPDuZwFkYX',  // tu contraseña de Railway
+  database: 'railway',
+  port: 12831
 });
 
 db.connect(err => {
   if (err) {
     console.error("Error de conexión:", err);
   } else {
-    console.log("Conectado a la base de datos en Railway");
+    console.log("Conectado a la base de datos MySQL en Railway");
   }
 });
 
