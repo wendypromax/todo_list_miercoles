@@ -7,7 +7,6 @@ const BACKEND_URL = "https://adventurous-curiosity-production-3d05.up.railway.ap
 export default function App() {
   const [tareas, setTareas] = useState([]);
   const [titulo, setTitulo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
 
   // Cargar tareas al iniciar
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           titulo: titulo.trim(),
-          descripcion: descripcion.trim(),
+          descripcion: "",
         }),
       });
 
@@ -44,7 +43,6 @@ export default function App() {
       setTareas([...tareas, nuevaTarea]);
 
       setTitulo("");
-      setDescripcion("");
     } catch (error) {
       console.error("Error al agregar tarea:", error);
     }
@@ -117,15 +115,6 @@ export default function App() {
           type="text"
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
-        />
-
-        <input
-          placeholder="Descripción (opcional)"
-          className="p-3 shadow-md rounded border"
-          type="text"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && agregarTarea()}
         />
 
         <button
