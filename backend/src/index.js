@@ -13,15 +13,17 @@ const allowedOrigins = [
   'https://adventurous-curiosity-production-3d05.up.railway.app'
 ];
 
+// Permitir también subdominios de Vercel (ej. https://frontend-xxxxx.vercel.app)
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = `La política CORS bloqueó el acceso desde: ${origin}`;
-        return callback(new Error(msg), false);
+      // Acepta orígenes listados explícitamente o cualquier subdominio de vercel.app
+      if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+        return callback(null, true);
       }
-      return callback(null, true);
+      const msg = `La política CORS bloqueó el acceso desde: ${origin}`;
+      return callback(new Error(msg), false);
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   })
