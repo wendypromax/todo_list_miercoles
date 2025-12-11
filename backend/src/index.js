@@ -14,9 +14,20 @@ const allowedOrigins = [
 ];
 
 // Permitir también subdominios de Vercel (ej. https://frontend-xxxxx.vercel.app)
-// Temporal: permitir todos los orígenes para depuración.
-// Cambiar a una política más restrictiva una vez verificado que funciona.
-app.use(cors());
+// Configurar CORS: aceptar orígenes listados y subdominios de vercel.app
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      const msg = `La política CORS bloqueó el acceso desde: ${origin}`;
+      return callback(new Error(msg), false);
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  })
+);
 
 app.use(express.json());
 
