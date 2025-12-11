@@ -39,6 +39,11 @@ app.get('/tareas', (req, res) => {
   });
 });
 
+// Ruta raíz para comprobar en el navegador que el backend está activo
+app.get('/', (req, res) => {
+  res.send('Backend funcionando ✅');
+});
+
 app.post('/tareas', (req, res) => {
   const { titulo, descripcion } = req.body;
   db.query(
