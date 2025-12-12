@@ -1,55 +1,69 @@
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/solid';
 import { useState } from "react";
-import { TrashIcon, PencilIcon, CheckIcon } from "@heroicons/react/16/solid";
 
-export default function TodoItem({ tarea, toggleComplete, eliminarTarea, editarTarea }) {
+export default function TodoItem({ tarea, toggleCompleted, eliminarTarea, API }) {
+
   const [editando, setEditando] = useState(false);
-  const [nuevoTexto, setNuevoTexto] = useState(tarea.titulo || "");
+  const [textoEditado, setTextoEditado] = useState(tarea.text);
 
-  const guardarEdicion = () => {
-    if (!nuevoTexto.trim()) return;
-    editarTarea(tarea.id, nuevoTexto.trim());
-    setEditando(false);
+  const guardarEdicion = async () => {
+    if (textoEditado.trim() === "") return;
+
+    try {
+      const res = await fetch(`${API}/tareas/${tarea.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ titulo: textoEditado, completado: tarea.completed })
+      });
+      if (!res.ok) throw new Error("Error al actualizar tarea");
+
+      tarea.text = textoEditado; // actualizar local
+      setEditando(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-    <div className="flex items-center justify-between gap-3 mb-2 p-3 shadow-md rounded">
+    <div
+      className={`flex justify-between items-center p-4 mb-2 rounded shadow transition-all
+        ${tarea.completed ? "bg-gray-100 opacity-80" : "bg-white"}
+      `}
+    >
+      {/* MODO EDICIÓN */}
       {editando ? (
         <input
-          type="text"
-          className="flex-1 p-1 border rounded"
-          value={nuevoTexto}
-          onChange={(e) => setNuevoTexto(e.target.value)}
+          className="bg-white text-black p-1 rounded w-full mr-3 border border-purple-400 outline-purple-500"
+          value={textoEditado || ""} // <-- evitar undefined
+          onChange={(e) => setTextoEditado(e.target.value)}
+          onBlur={guardarEdicion}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") guardarEdicion();
+            if (e.key === "Escape") setEditando(false);
+          }}
+          autoFocus
         />
       ) : (
-        <span
-          className={`flex-1 cursor-pointer ${
-            tarea.completado ? "line-through text-gray-500" : "text-gray-800"
-          }`}
-          onClick={toggleComplete}
-        >
-          {tarea.titulo}
+        <span className={tarea.completed ? "line-through text-gray-500" : "text-black"}>
+          {tarea.text}
         </span>
       )}
 
-      <div className="flex items-center gap-2">
+      {/* BOTONES */}
+      <div className="flex items-center gap-3 ml-3">
         <input
+          className="w-4 h-4"
           type="checkbox"
-          checked={tarea.completado}
-          onChange={toggleComplete}
+          checked={tarea.completed}
+          onChange={() => toggleCompleted(tarea.id)}
         />
 
-        {editando ? (
-          <button onClick={guardarEdicion}>
-            <CheckIcon className="w-5 h-5 text-green-500 hover:text-green-700" />
-          </button>
-        ) : (
-          <button onClick={() => setEditando(true)}>
-            <PencilIcon className="w-5 h-5 text-pink-400 hover:text-blue-500" />
-          </button>
-        )}
+        <button onClick={() => setEditando(true)}>
+          <PencilIcon className="w-5 h-5 text-purple-500 hover:text-purple-600" />
+        </button>
 
         <button onClick={() => eliminarTarea(tarea.id)}>
-          <TrashIcon className="w-5 h-5 text-gray-400 hover:text-red-500" />
+          <TrashIcon className="w-5 h-5 text-red-500 hover:text-red-600" />
         </button>
       </div>
     </div>
