@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TodoItem from "./components/TodoItem.jsx";
 
 // URL de tu backend desplegado
-const BACKEND_URL = "https://adventurous-curiosity-production-3d05.up.railway.app";
+const BACKEND_URL = "https://todolistmiercoles-production.up.railway.app";
 
 export default function App() {
   const [tareas, setTareas] = useState([]);
