@@ -36,14 +36,14 @@ app.get("/tareas", async (req, res) => {
 // Crear tarea
 app.post("/tareas", async (req, res) => {
   try {
-    const { descripcion } = req.body;
-    if (!descripcion) return res.status(400).json({ error: "La descripción es obligatoria" });
+    const { titulo } = req.body;
+    if (!titulo) return res.status(400).json({ error: "El título es obligatorio" });
 
     const result = await pool.query(
-      `INSERT INTO tareas (descripcion, fecha_creacion, completado)
+      `INSERT INTO tareas (titulo, fecha_creacion, completado)
        VALUES ($1, CURRENT_DATE, false)
        RETURNING *`,
-      [descripcion]
+      [titulo]
     );
     res.json(result.rows[0]);
   } catch (err) {
@@ -52,16 +52,18 @@ app.post("/tareas", async (req, res) => {
   }
 });
 
-// Actualizar tarea (tachar/destachar)
+// Actualizar tarea (tachar/destachar o editar titulo)
 app.put("/tareas/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { completado } = req.body;
+    const { completado, titulo } = req.body;
+    console.log("Actualizando tarea", id, "completado:", completado, "titulo:", titulo);
     const result = await pool.query(
-      "UPDATE tareas SET completado = $1 WHERE id = $2 RETURNING *",
-      [completado, id]
+      "UPDATE tareas SET completado = $1, titulo = $2 WHERE id = $3 RETURNING *",
+      [completado, titulo, id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: "Tarea no encontrada" });
+    console.log("Tarea actualizada:", result.rows[0]);
     res.json(result.rows[0]);
   } catch (err) {
     console.error("Error al actualizar tarea:", err);
