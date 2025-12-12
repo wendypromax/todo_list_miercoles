@@ -36,14 +36,14 @@ app.get("/tareas", async (req, res) => {
 // Crear tarea
 app.post("/tareas", async (req, res) => {
   try {
-    const { titulo } = req.body;
-    if (!titulo) return res.status(400).json({ error: "El título es obligatorio" });
+    const { descripcion } = req.body;
+    if (!descripcion) return res.status(400).json({ error: "La descripción es obligatoria" });
 
     const result = await pool.query(
-      `INSERT INTO tareas (titulo, fecha_creacion, completado)
+      `INSERT INTO tareas (descripcion, fecha_creacion, completado)
        VALUES ($1, CURRENT_DATE, false)
        RETURNING *`,
-      [titulo]
+      [descripcion]
     );
     res.json(result.rows[0]);
   } catch (err) {
