@@ -8,7 +8,7 @@ export default function App() {
   // URL de la API
   const envApi = import.meta.env.VITE_API_URL;
   const defaultLocal = "http://localhost:8080";
-  const PROD_BACKEND = "https://adventurous-curiosity-production-3d05.up.railway.app";
+  const PROD_BACKEND = "https://todolistmiercoles-production.up.railway.app";
   let inferredApi = envApi || defaultLocal;
   if (!envApi && typeof window !== "undefined" && window.location.hostname !== "localhost") {
     inferredApi = PROD_BACKEND;
