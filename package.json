@@ -8,7 +8,7 @@
     "dev:frontend": "npm --prefix frontend run dev",
     "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
     "build:frontend": "cd frontend && npx vite build",
-    "build": "cd frontend && npx vite build && mv dist .."
+    "build": "npm run build --prefix frontend && mv frontend/dist ."
   },
   "devDependencies": {
     "concurrently": "^8.2.0",
