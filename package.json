@@ -11,6 +11,7 @@
     "build": "cd frontend && npx vite build && mv dist .."
   },
   "devDependencies": {
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "vite": "^7.2.7"
   }
 }
